@@ -149,8 +149,3 @@ export default function App() {
   );
 }
 '''
-
-from pathlib import Path
-file_path = Path("/mnt/data/App.jsx")
-file_path.write_text(updated_app_jsx)
-file_path
