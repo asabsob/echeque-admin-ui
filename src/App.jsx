@@ -1,12 +1,11 @@
 import { useEffect, useState } from "react";
 import IssueChequeForm from "./IssueChequeForm";
 
-// ✅ Fix: Define statusColors
 const statusColors = {
-  Pending: "bg-yellow-100 text-yellow-800",
-  Signed: "bg-blue-100 text-blue-800",
-  Presented: "bg-green-100 text-green-800",
-  Revoked: "bg-red-100 text-red-800",
+  Pending: "bg-yellow-200 text-yellow-800",
+  Signed: "bg-blue-200 text-blue-800",
+  Presented: "bg-green-200 text-green-800",
+  Revoked: "bg-red-200 text-red-800",
   Outdated: "bg-gray-300 text-gray-700",
 };
 
@@ -33,61 +32,61 @@ export default function EChequeDashboard() {
   }, []);
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
-      {/* ✅ Issue form at the top */}
+    <div className="p-6 bg-slate-100 min-h-screen space-y-6">
       <IssueChequeForm onSuccess={fetchCheques} />
 
-      {/* ✅ Conditional render */}
       {loading ? (
-        <p>Loading...</p>
+        <p className="text-center">Loading...</p>
       ) : error ? (
-        <p className="text-red-600">❌ Failed to load cheques.</p>
+        <p className="text-center text-red-600">❌ Failed to load cheques.</p>
       ) : cheques.length === 0 ? (
-        <p>No cheques available.</p>
+        <p className="text-center">No cheques available.</p>
       ) : (
-        <div className="grid gap-6 grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-6">
+        <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {cheques.map((cheque) => {
             const status =
-              new Date(cheque.expiry_date) < new Date() &&
-              cheque.status !== "Revoked"
+              new Date(cheque.expiry_date) < new Date() && cheque.status !== "Revoked"
                 ? "Outdated"
                 : cheque.status;
 
             return (
               <div
                 key={cheque.id}
-                className="rounded-2xl shadow-md border border-gray-200 bg-white p-4"
+                className="bg-white border border-gray-400 shadow-lg rounded-xl px-6 py-4 font-serif relative"
+                style={{
+                  backgroundImage: "linear-gradient(to bottom right, #fdf6ee, #eee)",
+                  backgroundSize: "cover",
+                }}
               >
-                <div className="flex justify-between items-center mb-2">
-                  <div className="font-bold text-lg">
-                    Cheque #{cheque.id.slice(0, 8)}
+                <div className="flex justify-between text-sm text-gray-600 mb-2">
+                  <span>فرع</span>
+                  <span className="italic">Cheque #{cheque.id.slice(0, 8)}</span>
+                </div>
+
+                <div className="flex justify-between mb-3">
+                  <div className="text-sm">
+                    <span className="font-bold">Pay To:</span> {cheque.receiver}
                   </div>
-                  <span
-                    className={`${statusColors[status]} px-3 py-1 rounded-full text-sm`}
-                  >
+                  <div className="text-sm">
+                    <span className="font-bold">Date:</span> {cheque.cheque_date}
+                  </div>
+                </div>
+
+                <div className="text-lg font-bold mb-2">JD {cheque.amount}</div>
+
+                <div className="text-sm text-gray-700 mb-2">
+                  <span className="font-bold">Sender:</span> {cheque.sender}
+                </div>
+
+                <div className="flex justify-between text-xs">
+                  <span>Expiry: {cheque.expiry_date}</span>
+                  <span className={`px-2 py-1 rounded-full ${statusColors[status]}`}>
                     {status}
                   </span>
                 </div>
-                <div className="text-sm text-gray-700 space-y-1">
-                  <p>
-                    Sender: <span className="font-medium">{cheque.sender}</span>
-                  </p>
-                  <p>
-                    Receiver:{" "}
-                    <span className="font-medium">{cheque.receiver}</span>
-                  </p>
-                  <p>
-                    Amount:{" "}
-                    <span className="font-medium">JD {cheque.amount}</span>
-                  </p>
-                  <p>
-                    Date:{" "}
-                    <span className="font-medium">{cheque.cheque_date}</span>
-                  </p>
-                  <p>
-                    Expiry:{" "}
-                    <span className="font-medium">{cheque.expiry_date}</span>
-                  </p>
+
+                <div className="mt-6 border-t pt-2 text-right text-xs italic text-gray-500">
+                  Signature ____________________
                 </div>
               </div>
             );
