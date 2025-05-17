@@ -65,8 +65,7 @@ export default function App() {
         <div className="grid gap-6 grid-cols-1 md:grid-cols-2">
           {filteredCheques.map((cheque) => {
             const status =
-              new Date(cheque.expiry_date) < new Date() &&
-              cheque.status !== "Revoked"
+              new Date(cheque.expiry_date) < new Date() && cheque.status !== "Revoked"
                 ? "Outdated"
                 : cheque.status;
 
@@ -128,8 +127,7 @@ export default function App() {
 
                 <div className="absolute bottom-4 left-4">
                   <QRCodeCanvas
-  value={`https://echeque-admin-ui.vercel.app/cheque/${cheque.id}`}
-/>
+                    value={`https://echeque-admin-ui.vercel.app/cheque/${cheque.id}`}
                     size={60}
                     bgColor="#ffffff"
                     fgColor="#000000"
@@ -148,4 +146,3 @@ export default function App() {
     </div>
   );
 }
-
