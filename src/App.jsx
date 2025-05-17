@@ -37,7 +37,6 @@ export default function App() {
   const filteredCheques =
     filter === "All" ? cheques : cheques.filter((c) => c.status === filter);
 
-  // ✅ 
   const downloadCheque = (chequeId) => {
     const node = document.getElementById(`cheque-${chequeId}`);
     html2canvas(node).then((canvas) => {
@@ -80,51 +79,51 @@ export default function App() {
                 ? "Outdated"
                 : cheque.status;
 
+            const statusClass = statusColors[status] || "";
+
             return (
               <div
                 key={cheque.id}
-                id={`cheque-${cheque.id}`} // ✅ Assign unique ID here
-                className="relative bg-white border border-gray-400 shadow-lg rounded-xl px-6 py-4 font-serif"
-                style={{
-                  backgroundImage: 'url("/cheque-bg.png")',
-                  backgroundSize: "cover",
-                  backgroundRepeat: "no-repeat",
-                }}
+                id={`cheque-${cheque.id}`}
+                className="relative w-[900px] h-[250px] bg-no-repeat bg-cover font-serif"
+                style={{ backgroundImage: 'url("/cheque-template.png")' }}
               >
+                {/* Download Button */}
                 <button
-                  onClick={() => downloadCheque(cheque.id)} // ✅ Call download by ID
+                  onClick={() => downloadCheque(cheque.id)}
                   className="absolute top-2 right-2 text-xs bg-blue-600 text-white px-2 py-1 rounded"
                 >
                   Download
                 </button>
 
-                <div className="flex justify-between text-sm text-gray-600 mb-2">
-                  <span>فرع</span>
-                  <span className="italic">Cheque #{cheque.id.slice(0, 8)}</span>
+                {/* Positioned Fields */}
+                <div className="absolute top-[20px] left-[30px] text-sm font-semibold">
+                  Cheque #: {cheque.id.slice(0, 8)}
+                </div>
+                <div className="absolute top-[50px] left-[30px] text-sm">
+                  Pay To: {cheque.receiver}
+                </div>
+                <div className="absolute top-[80px] left-[30px] text-lg font-bold">
+                  JD {cheque.amount}
+                </div>
+                <div className="absolute top-[110px] left-[30px] text-sm">
+                  Sender: {cheque.sender}
+                </div>
+                <div className="absolute top-[140px] left-[30px] text-sm">
+                  Date: {cheque.cheque_date}
+                </div>
+                <div className="absolute top-[170px] left-[30px] text-sm">
+                  Expiry: {cheque.expiry_date}
                 </div>
 
-                <div className="flex justify-between mb-3">
-                  <div className="text-sm">
-                    <span className="font-bold">Pay To:</span> {cheque.receiver}
-                  </div>
-                  <div className="text-sm">
-                    <span className="font-bold">Date:</span> {cheque.cheque_date}
-                  </div>
+                {/* Status Badge */}
+                <div
+                  className={`absolute top-[170px] right-[30px] text-xs px-2 py-1 rounded-full font-bold ${statusClass}`}
+                >
+                  {status}
                 </div>
 
-                <div className="text-lg font-bold mb-2">JD {cheque.amount}</div>
-
-                <div className="text-sm text-gray-700 mb-2">
-                  <span className="font-bold">Sender:</span> {cheque.sender}
-                </div>
-
-                <div className="flex justify-between text-xs mb-3">
-                  <span>Expiry: {cheque.expiry_date}</span>
-                  <span className={`px-2 py-1 rounded-full ${statusColors[status]}`}>
-                    {status}
-                  </span>
-                </div>
-
+                {/* QR Code */}
                 <div className="absolute bottom-4 left-4">
                   <QRCodeCanvas
                     value={`https://echeque-admin-ui.vercel.app/cheque/${cheque.id}`}
@@ -135,7 +134,8 @@ export default function App() {
                   />
                 </div>
 
-                <div className="mt-8 border-t pt-2 text-right text-xs italic text-gray-500">
+                {/* Signature Line */}
+                <div className="absolute bottom-4 right-6 text-xs italic text-gray-500">
                   Signature ____________________
                 </div>
               </div>
