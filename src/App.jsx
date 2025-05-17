@@ -37,7 +37,7 @@ export default function App() {
   const filteredCheques =
     filter === "All" ? cheques : cheques.filter((c) => c.status === filter);
 
-  // ✅ Use this instead of useRef
+  // ✅ 
   const downloadCheque = (chequeId) => {
     const node = document.getElementById(`cheque-${chequeId}`);
     html2canvas(node).then((canvas) => {
