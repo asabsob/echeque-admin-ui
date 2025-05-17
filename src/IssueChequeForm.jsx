@@ -1,4 +1,3 @@
-
 import { useState } from "react";
 
 export default function IssueChequeForm({ onSuccess }) {
@@ -19,8 +18,11 @@ export default function IssueChequeForm({ onSuccess }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
+
+    console.log("Submitting cheque:", formData); // ✅ Debug log
+
     try {
-      await fetch("https://echeque-api-production.up.railway.app/echeques/issue", {
+      const response = await fetch("https://echeque-api-production.up.railway.app/echeques/issue", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -28,16 +30,26 @@ export default function IssueChequeForm({ onSuccess }) {
         },
         body: JSON.stringify(formData),
       });
-      setFormData({
-        sender_account: "",
-        receiver_account: "",
-        amount: "",
-        cheque_date: "",
-        expiry_date: "",
-      });
-      onSuccess();
+
+      const result = await response.json();
+      console.log("API response:", result); // ✅ Debug log
+
+      if (response.ok) {
+        setFormData({
+          sender_account: "",
+          receiver_account: "",
+          amount: "",
+          cheque_date: "",
+          expiry_date: "",
+        });
+        onSuccess(); // 🔄 Reload cheques
+      } else {
+        alert("Failed to issue cheque. Please try again.");
+      }
+
     } catch (err) {
-      alert("Failed to issue cheque.");
+      console.error("Error during API call:", err);
+      alert("Network error. Please try again later.");
     } finally {
       setSubmitting(false);
     }
