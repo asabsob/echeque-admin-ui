@@ -128,7 +128,8 @@ export default function App() {
 
                 <div className="absolute bottom-4 left-4">
                   <QRCodeCanvas
-                    value={\`https://echeque-admin-ui.vercel.app/cheque/\${cheque.id}\`}
+  value={`https://echeque-admin-ui.vercel.app/cheque/${cheque.id}`}
+/>
                     size={60}
                     bgColor="#ffffff"
                     fgColor="#000000"
