@@ -1,5 +1,3 @@
-# Full updated App.jsx content with QR code, filtering, download, and background image
-updated_app_jsx = '''
 import { useEffect, useState, useRef } from "react";
 import IssueChequeForm from "./IssueChequeForm";
 import { QRCodeCanvas } from "qrcode.react";
