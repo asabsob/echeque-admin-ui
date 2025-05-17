@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState } from "react";
 import IssueChequeForm from "./IssueChequeForm";
 import { QRCodeCanvas } from "qrcode.react";
 import html2canvas from "html2canvas";
@@ -37,6 +37,17 @@ export default function App() {
   const filteredCheques =
     filter === "All" ? cheques : cheques.filter((c) => c.status === filter);
 
+  // ✅ Use this instead of useRef
+  const downloadCheque = (chequeId) => {
+    const node = document.getElementById(`cheque-${chequeId}`);
+    html2canvas(node).then((canvas) => {
+      const link = document.createElement("a");
+      link.download = `cheque-${chequeId}.png`;
+      link.href = canvas.toDataURL();
+      link.click();
+    });
+  };
+
   return (
     <div className="p-6 bg-slate-100 min-h-screen space-y-6">
       <IssueChequeForm onSuccess={fetchCheques} />
@@ -69,21 +80,10 @@ export default function App() {
                 ? "Outdated"
                 : cheque.status;
 
-            const chequeRef = useRef(null);
-
-            const downloadCheque = () => {
-              html2canvas(chequeRef.current).then((canvas) => {
-                const link = document.createElement("a");
-                link.download = `cheque-${cheque.id}.png`;
-                link.href = canvas.toDataURL();
-                link.click();
-              });
-            };
-
             return (
               <div
                 key={cheque.id}
-                ref={chequeRef}
+                id={`cheque-${cheque.id}`} // ✅ Assign unique ID here
                 className="relative bg-white border border-gray-400 shadow-lg rounded-xl px-6 py-4 font-serif"
                 style={{
                   backgroundImage: 'url("/cheque-bg.png")',
@@ -92,7 +92,7 @@ export default function App() {
                 }}
               >
                 <button
-                  onClick={downloadCheque}
+                  onClick={() => downloadCheque(cheque.id)} // ✅ Call download by ID
                   className="absolute top-2 right-2 text-xs bg-blue-600 text-white px-2 py-1 rounded"
                 >
                   Download
