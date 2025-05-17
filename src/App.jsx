@@ -9,7 +9,7 @@ const statusColors = {
   Outdated: "bg-gray-300 text-gray-700",
 };
 
-export default function EChequeDashboard() {
+export default function App() {
   const [cheques, setCheques] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
